@@ -2,3 +2,5 @@
 title = "Transformと4x4行列"
 authors = ["kazanefu"]
 language = "en"
+[output.html]
+mathjax-support = true
