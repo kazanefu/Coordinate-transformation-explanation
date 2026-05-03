@@ -4,3 +4,5 @@ authors = ["kazanefu"]
 language = "en"
 [output.html]
 mathjax-support = true
+[build]
+build-dir = "docs"
