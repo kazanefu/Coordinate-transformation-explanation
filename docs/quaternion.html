@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Transformと4x4行列</title>
-        <base href="/">
+        <title>クォータニオン - Transformと4x4行列</title>
 
 
         <!-- Custom HTML head -->
@@ -177,13 +176,97 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="クォータニオンによる回転"><a class="header" href="#クォータニオンによる回転">クォータニオンによる回転</a></h1>
+<h2 id="クォータニオンとは"><a class="header" href="#クォータニオンとは">クォータニオンとは</a></h2>
+<p>まずはクォータニオンとは何かを簡単に説明します。</p>
+<p><strong>Quaternion</strong>を日本語にすると<strong>四元数</strong>といいます。四元数は複素数の拡張のようなもので虚数単位を3つ持ちます。
+$$
+p = w + ix + jy + kz
+$$
+虚数単位なのでもちろん\(i^2 = j^2 = k^2 = -1\)です。</p>
+<p>異なる虚数単位の積は以下のように定義されます。
+$$
+ij = k\\
+jk = i\\
+ki = j\\
+ji = -k\\
+kj = -i\\
+ik = -j\\
+$$</p>
+<p>見ての通り四元数では乗算に可換性がありません。</p>
+<p>加法及び乗法の結合法則, 加法の交換法則, 分配法則が成り立ちます。</p>
+<p>実部は\(w\)で虚部は\(ix + jy + kz\)の部分です。共役は\(\overline{p} = w - (ix + jy + kz)\)です。</p>
+<p>また、\(\overline{p} \ \overline{q} = \overline{qp}\)が成り立ちます。</p>
+<p>ノルムは複素数と同様に
+$$
+|p| = \sqrt{p\overline{p}} = \sqrt{w^2 + x^2 + y^2 + z^2}
+$$
+となります。</p>
+<p>逆元は
+$$
+pp^{-1} = 1 \\
+p^{-1} = \frac{\overline{p}}{|p|^2}
+$$</p>
+<h2 id="証明したいもの"><a class="header" href="#証明したいもの">証明したいもの</a></h2>
+<p>先に回転がどのように表せるのか示しておく。
+$$
+q = \cos{\frac{\theta}{2}} + i^Tv_{axis}\sin{\frac{\theta}{2}} \\
+p’ = qp\overline{q}
+$$
+この式を導出したい。</p>
+<h2 id="z軸周りでの回転"><a class="header" href="#z軸周りでの回転">Z軸周りでの回転</a></h2>
+<p>まずはZ軸周りでの回転(つまりXY平面に平行な平面上での回転)を考えていきます。元の3次元座標\((x, y, z)\)に対応する四元数を\(p = i^T \begin{pmatrix} x \\ y \\ z\end{pmatrix} (i = \begin{pmatrix} i \\ j \\ k\end{pmatrix})\)として回転移動先を\(p’ = i^T \begin{pmatrix} x’ \\ y’ \\ z’\end{pmatrix}\)とする。このときの\(p, p’\)の関係を表したい。</p>
+<p>$$
+p = ix + jy + kz = (x + ky)i + kz
+$$
+と変形する。</p>
+<p>この変形から\(x + ky\)はただの複素数なので複素数によるXY平面での回転と同じようにして回転させられそうだ。ただし、\(kz\)を変化させずに行う必要がある。</p>
+<p>$$
+x + ky = \sqrt{x^2 + y^2}(\cos\alpha + k \sin\alpha) = ae^{k\alpha}
+$$
+と表せ
+$$
+p = (ae^{k\alpha})i + kz
+$$
+となる。</p>
+<p>目標となる形は
+$$
+p’ = (ae^{k(\alpha + \theta)})i + kz
+$$</p>
+<p>である。
+$$
+q = \cos{\theta’} + k\sin{\theta’} = e^{k\theta’}
+$$
+として左から掛けてみる
+$$
+qp = e^{k\theta’} \{ (ae^{k\alpha})i + kz\} = (ae^{k(\alpha + \theta’)})i + e^{k\theta’}kz
+\\
+(ae^{k(\alpha + \theta’)})i + e^{k\theta’}kz = i(ae^{-k(\alpha + \theta’)}) + e^{k\theta’}kz \because ki = -ik
+$$</p>
+<p>これでは\(kz\)も変化してしまっているので、その分を補正したい。そこで\(\overline{q}\)を右から掛けてみる</p>
+<p>$$
+qp\overline{q} = \{i(ae^{-k(\alpha + \theta’)}) + e^{k\theta’}kz\}e^{-k\theta’} \\
+= i(ae^{-k(\alpha + 2\theta’)}) + kz
+= (ae^{k(\alpha + 2\theta’)})i + kz
+$$</p>
+<p>これでZ軸周りに\(2\theta’\)回転したものになりました。したがって
+$$
+q = \cos{\frac{\theta}{2}} + k\sin{\frac{\theta}{2}} = e^{k\frac{\theta}{2}}
+$$
+として
+$$
+p’ = qp\overline{q}
+$$
+が成り立つ。よってZ軸周りでの回転については示せた。</p>
+<h2 id="任意の軸周りの回転"><a class="header" href="#任意の軸周りの回転">任意の軸周りの回転</a></h2>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="math.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -192,6 +275,9 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="math.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
             </nav>
 

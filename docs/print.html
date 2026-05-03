@@ -38,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-90ae1766.js";
+            window.path_to_searchindex_js = "searchindex-a5ffb42d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d0dc6153.js"></script>
+        <script src="toc-417812fc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -304,8 +304,99 @@ $$</p>
 <li>平行移動</li>
 </ul>
 <p>を表しています。</p>
-<hr>
 <p>このように、複数の変換を<strong>行列の積として合成できる</strong>ことが重要です。</p>
+<hr>
+<p><strong>正規直交基底</strong></p>
+<p>ベクトル空間\(V = \mathbb{R}^n\)は\(\mathbb{R}\)上の内積空間として、\(a,b \in V\)で標準内積を\((a, b)\)と表記し\((a, b) \in \mathbb{R}\)である。</p>
+<p>このとき次の条件を満たす\(V\)の基\(\{ u_1, …, u_n\}\)を正規直交基底という
+$$
+(u_i, u_j) = \delta_{ij}
+$$
+(\(\delta_{ij}\)はクロネッカーのデルタ)</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="クォータニオンによる回転"><a class="header" href="#クォータニオンによる回転">クォータニオンによる回転</a></h1>
+<h2 id="クォータニオンとは"><a class="header" href="#クォータニオンとは">クォータニオンとは</a></h2>
+<p>まずはクォータニオンとは何かを簡単に説明します。</p>
+<p><strong>Quaternion</strong>を日本語にすると<strong>四元数</strong>といいます。四元数は複素数の拡張のようなもので虚数単位を3つ持ちます。
+$$
+p = w + ix + jy + kz
+$$
+虚数単位なのでもちろん\(i^2 = j^2 = k^2 = -1\)です。</p>
+<p>異なる虚数単位の積は以下のように定義されます。
+$$
+ij = k\\
+jk = i\\
+ki = j\\
+ji = -k\\
+kj = -i\\
+ik = -j\\
+$$</p>
+<p>見ての通り四元数では乗算に可換性がありません。</p>
+<p>加法及び乗法の結合法則, 加法の交換法則, 分配法則が成り立ちます。</p>
+<p>実部は\(w\)で虚部は\(ix + jy + kz\)の部分です。共役は\(\overline{p} = w - (ix + jy + kz)\)です。</p>
+<p>また、\(\overline{p} \ \overline{q} = \overline{qp}\)が成り立ちます。</p>
+<p>ノルムは複素数と同様に
+$$
+|p| = \sqrt{p\overline{p}} = \sqrt{w^2 + x^2 + y^2 + z^2}
+$$
+となります。</p>
+<p>逆元は
+$$
+pp^{-1} = 1 \\
+p^{-1} = \frac{\overline{p}}{|p|^2}
+$$</p>
+<h2 id="証明したいもの"><a class="header" href="#証明したいもの">証明したいもの</a></h2>
+<p>先に回転がどのように表せるのか示しておく。
+$$
+q = \cos{\frac{\theta}{2}} + i^Tv_{axis}\sin{\frac{\theta}{2}} \\
+p’ = qp\overline{q}
+$$
+この式を導出したい。</p>
+<h2 id="z軸周りでの回転"><a class="header" href="#z軸周りでの回転">Z軸周りでの回転</a></h2>
+<p>まずはZ軸周りでの回転(つまりXY平面に平行な平面上での回転)を考えていきます。元の3次元座標\((x, y, z)\)に対応する四元数を\(p = i^T \begin{pmatrix} x \\ y \\ z\end{pmatrix} (i = \begin{pmatrix} i \\ j \\ k\end{pmatrix})\)として回転移動先を\(p’ = i^T \begin{pmatrix} x’ \\ y’ \\ z’\end{pmatrix}\)とする。このときの\(p, p’\)の関係を表したい。</p>
+<p>$$
+p = ix + jy + kz = (x + ky)i + kz
+$$
+と変形する。</p>
+<p>この変形から\(x + ky\)はただの複素数なので複素数によるXY平面での回転と同じようにして回転させられそうだ。ただし、\(kz\)を変化させずに行う必要がある。</p>
+<p>$$
+x + ky = \sqrt{x^2 + y^2}(\cos\alpha + k \sin\alpha) = ae^{k\alpha}
+$$
+と表せ
+$$
+p = (ae^{k\alpha})i + kz
+$$
+となる。</p>
+<p>目標となる形は
+$$
+p’ = (ae^{k(\alpha + \theta)})i + kz
+$$</p>
+<p>である。
+$$
+q = \cos{\theta’} + k\sin{\theta’} = e^{k\theta’}
+$$
+として左から掛けてみる
+$$
+qp = e^{k\theta’} \{ (ae^{k\alpha})i + kz\} = (ae^{k(\alpha + \theta’)})i + e^{k\theta’}kz
+\\
+(ae^{k(\alpha + \theta’)})i + e^{k\theta’}kz = i(ae^{-k(\alpha + \theta’)}) + e^{k\theta’}kz \because ki = -ik
+$$</p>
+<p>これでは\(kz\)も変化してしまっているので、その分を補正したい。そこで\(\overline{q}\)を右から掛けてみる</p>
+<p>$$
+qp\overline{q} = \{i(ae^{-k(\alpha + \theta’)}) + e^{k\theta’}kz\}e^{-k\theta’} \\
+= i(ae^{-k(\alpha + 2\theta’)}) + kz
+= (ae^{k(\alpha + 2\theta’)})i + kz
+$$</p>
+<p>これでZ軸周りに\(2\theta’\)回転したものになりました。したがって
+$$
+q = \cos{\frac{\theta}{2}} + k\sin{\frac{\theta}{2}} = e^{k\frac{\theta}{2}}
+$$
+として
+$$
+p’ = qp\overline{q}
+$$
+が成り立つ。よってZ軸周りでの回転については示せた。</p>
+<h2 id="任意の軸周りの回転"><a class="header" href="#任意の軸周りの回転">任意の軸周りの回転</a></h2>
 
                     </main>
 
