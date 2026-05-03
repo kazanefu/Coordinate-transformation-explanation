@@ -239,4 +239,21 @@ p' = qp\overline{q}
 $$
 と表せることが示された。
 
+## 演算の重ねがけ
+$$
+rotate(q,p) = qp\overline{q}
+$$
+としたとき
+$$
+rotate(q_1q_2, p) = q_1q_2p\overline{q_1q_2} = q_1q_2p\overline{q_2}\\\overline{q_2}
+$$
+のように重ねがけもできます。また同時に回転させるもの積を先に計算するということも可能です。
 
+$$
+rotate(q_1q_2, p) = rotate(q_1, rotate(q_2, p))
+$$
+
+
+## 演算子オーバーロード
+
+またUnityでの`Quaternion`型ではQuaternion同士の`*`の演算子オーバーロードがされています。\\(rotate(q_1q_2, p) = rotate(q_1, rotate(q_2, p))\\)からわかるように`*`ではlhsとrhsの回転を組み合わせることを意味します。

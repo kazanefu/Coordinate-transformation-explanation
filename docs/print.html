@@ -38,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-be62619d.js";
+            window.path_to_searchindex_js = "searchindex-6021d50d.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-417812fc.js"></script>
+        <script src="toc-3a3840b0.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,7 +183,7 @@
 <ol>
 <li>基本的な数学の概念の確認</li>
 <li>クォータニオンを使った回転</li>
-<li>4x4行列を使った座標の決定</li>
+<li>4x4行列を使った座標変換</li>
 </ol>
 <p>もしかしたら1年生はまだ授業でやっていない内容が含まれるかもしれませんが線形代数でいずれやりますしそこまで難しくはないので安心してください</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -523,6 +523,138 @@ q = \cos{\frac{\theta}{2}} + I^T v_{axis} \sin{\frac{\theta}{2}} \\
 p’ = qp\overline{q}
 $$
 と表せることが示された。</p>
+<h2 id="演算の重ねがけ"><a class="header" href="#演算の重ねがけ">演算の重ねがけ</a></h2>
+<p>$$
+rotate(q,p) = qp\overline{q}
+$$
+としたとき
+$$
+rotate(q_1q_2, p) = q_1q_2p\overline{q_1q_2} = q_1q_2p\overline{q_2}\\overline{q_2}
+$$
+のように重ねがけもできます。また同時に回転させるもの積を先に計算するということも可能です。</p>
+<p>$$
+rotate(q_1q_2, p) = rotate(q_1, rotate(q_2, p))
+$$</p>
+<h2 id="演算子オーバーロード"><a class="header" href="#演算子オーバーロード">演算子オーバーロード</a></h2>
+<p>またUnityでの<code>Quaternion</code>型ではQuaternion同士の<code>*</code>の演算子オーバーロードがされています。\(rotate(q_1q_2, p) = rotate(q_1, rotate(q_2, p))\)からわかるように<code>*</code>ではlhsとrhsの回転を組み合わせることを意味します。</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="4x4行列で3次元座標を扱う"><a class="header" href="#4x4行列で3次元座標を扱う">4x4行列で3次元座標を扱う</a></h1>
+<p>2次元の
+$$
+p’ = e^{i\theta} s p + t
+$$
+と同様に四元数の範囲で3次元は
+$$
+p’ = r(sp)\overline{r} + t
+$$
+のように拡大縮小,回転,平行移動ができることがわかりました。しかしこれでは複数種類の演算が出てきて不便が生じることがあります。なので3次元でも2次元の
+$$
+\begin{pmatrix}
+x’ \\
+y’ \\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+s\cos \theta &amp; -s\sin \theta &amp; t_x \\
+s\sin \theta &amp; s\cos \theta  &amp; t_y \\
+0            &amp; 0             &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+1
+\end{pmatrix}
+$$
+のように同次座標を導入して統一的な表現・計算で表したいです。</p>
+<p>$$
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$</p>
+<h2 id="拡大縮小"><a class="header" href="#拡大縮小">拡大縮小</a></h2>
+<p>$$
+\begin{pmatrix}
+x’ \\
+y’ \\
+z’ \\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+s_x &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; s_y &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; s_z &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$</p>
+<h2 id="平行移動"><a class="header" href="#平行移動">平行移動</a></h2>
+<p>$$
+\begin{pmatrix}
+x’ \\
+y’ \\
+z’ \\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 &amp; t_x \\
+0 &amp; 1 &amp; 0 &amp; t_y \\
+0 &amp; 0 &amp; 1 &amp; t_z \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$</p>
+<h2 id="回転移動"><a class="header" href="#回転移動">回転移動</a></h2>
+<p>\(q = w + iv_x + jv_y + kv_z\)に対して
+$$
+\begin{pmatrix}
+x’ \\
+y’ \\
+z’ \\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+1 - 2(y^2 + z^2) &amp; 2(xy - zw) &amp; 2(xz + yw) &amp; 0 \\
+2(xy + zw) &amp; 1 - 2(x^2 + z^2) &amp; 2(yz - xw) &amp; 0 \\
+2(xz - yw) &amp; 2(yz + xw) &amp; 1 - 2(x^2 + y^2) &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$</p>
+<hr>
+<p>Unityではこれらを掛けた<code>TRS</code>行列と呼ばれる<code>position(translation) / rotation / scale</code>を一つの4x4行列にまとめています。この4x4行列の型は<code>Matrix4x4</code>として存在しています。</p>
+<p>内部的には
+$$
+M = TRS
+$$
+$$
+p’ = Mp = (TRS)p = (T(R(Sp)))
+$$
+のようになっていて<code>S -&gt; R -&gt; T</code>の順で作用しているのと等しいです。</p>
+<h2 id="どんなところで使われているのか"><a class="header" href="#どんなところで使われているのか">どんなところで使われているのか</a></h2>
+<ul>
+<li>ワールド座標のMatrix4x4 = ローカル座標のMatrix4x4 * 親のワールド座標のMatrix4x4でのローカル-&gt;ワールドの変換</li>
+<li>ワールド座標 -&gt; カメラ座標への変換</li>
+<li>描画</li>
+</ul>
+<p>逆に単に回転だけ,平行移動だけの変換しかしない場合はQuaternion,Vector3でそれぞれ計算したほうが無駄が少ないのでMatrix4x4はあまり使いません。</p>
 
                     </main>
 
