@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f795e99a.js";
+            window.path_to_searchindex_js = "searchindex-cf3bf9ae.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a5f4e240.js"></script>
@@ -255,8 +255,29 @@ z \\
 \end{pmatrix}
 $$</p>
 <h2 id="回転移動"><a class="header" href="#回転移動">回転移動</a></h2>
-<p>\(q = w + iv_x + jv_y + kv_z\)に対して
-$$
+<p>\(q = w + iv_x + jv_y + kv_z\)に対して</p>
+<p>$$
+\begin{pmatrix}
+x’ \\
+y’ \\
+z’ \\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+w^2 + x^2 - y^2 - z^2 &amp; 2(xy - zw) &amp; 2(xz + yw) &amp; 0 \\
+2(xy + zw) &amp; w^2 - x^2 + y^2 - z^2 &amp; 2(yz - xw) &amp; 0 \\
+2(xz - yw) &amp; 2(yz + xw) &amp; w^2 - x^2 - y^2 + z^2 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+z \\
+1
+\end{pmatrix}
+$$</p>
+<p>正規化されてる前提では</p>
+<p>$$
 \begin{pmatrix}
 x’ \\
 y’ \\

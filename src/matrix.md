@@ -85,6 +85,30 @@ $$
 ## 回転移動
 
 \\(q = w + iv_x + jv_y + kv_z\\)に対して
+
+$$
+\begin{pmatrix}
+x' \\\\
+y' \\\\
+z' \\\\
+1
+\end{pmatrix} =
+\begin{pmatrix}
+w^2 + x^2 - y^2 - z^2 & 2(xy - zw) & 2(xz + yw) & 0 \\\\
+2(xy + zw) & w^2 - x^2 + y^2 - z^2 & 2(yz - xw) & 0 \\\\
+2(xz - yw) & 2(yz + xw) & w^2 - x^2 - y^2 + z^2 & 0 \\\\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix}
+x \\\\
+y \\\\
+z \\\\
+1
+\end{pmatrix}
+$$
+
+正規化されてる前提では
+
 $$
 \begin{pmatrix}
 x' \\\\
